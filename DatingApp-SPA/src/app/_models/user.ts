@@ -7,12 +7,12 @@ export interface User {
     age: number;
     gender: string;
     created: Date;
-    lastActive: Date; 
+    lastActive: Date;
     photoUrl: string;
     city: string;
     country: string;
     interests?: string;
-    intoduction?: string;
-    lookingFor?: string
+    introduction?: string;
+    lookingFor?: string;
     photos?: Photo[];
 }
