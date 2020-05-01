@@ -13,6 +13,7 @@ import { UserService } from 'src/app/_services/user.service';
 })
 export class MemberEditComponent implements OnInit {
   @ViewChild('editForm') editForm: NgForm;
+  // timeAgo = new Date();
   user: User;
   photoUrl: string;
   @HostListener('window:beforeunload', ['$event'])

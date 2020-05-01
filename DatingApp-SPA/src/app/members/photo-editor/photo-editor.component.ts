@@ -9,8 +9,8 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-photo-editor',
-  templateUrl: './Photo-editor.component.html',
-  styleUrls: ['./Photo-editor.component.css']
+  templateUrl: './photo-editor.component.html',
+  styleUrls: ['./photo-editor.component.css']
 })
 export class PhotoEditorComponent implements OnInit {
   @Input() photos: Photo[];
