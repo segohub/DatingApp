@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using DatingApp.API.Data;
 using DatingApp.API.Helpers;
@@ -12,13 +8,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API
@@ -32,11 +25,37 @@ namespace DatingApp.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureDevelopmentServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => x.UseSqlite(
-                Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(x => {
+                x.UseLazyLoadingProxies();
+                x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            } );
+
+            //Pour MySql
+            // services.AddDbContext<DataContext>(x => 
+            //     x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));//à maj
+
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            //Pour MySql
+            services.AddDbContext<DataContext>(x => {
+                x.UseLazyLoadingProxies();
+                x.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+            });//à maj
+
+            //Pour SqlServer
+            // services.AddDbContext<DataContext>(x => 
+            //     x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            ConfigureServices(services);
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {            
             services.AddControllers().AddNewtonsoftJson();
             services.AddCors();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
@@ -85,6 +104,12 @@ namespace DatingApp.API
             // app.UseHttpsRedirection();
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            
+            //Permet de prendre tous les types d'encodage de page niveau du navigateur
+            //Ex msg d'erreur : L'encodage de caractères d'un document en texte brut n’a pas été déclaré...
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseRouting();
             app.UseAuthentication();
 
@@ -93,6 +118,7 @@ namespace DatingApp.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

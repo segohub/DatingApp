@@ -9,11 +9,11 @@ namespace DatingApp.API.Models
         public int SenderId { get; set; }
         
         [JsonIgnore]
-        public User Sender { get; set; }
+        public virtual User Sender { get; set; }
         public int RecipientId { get; set; }
 
         [JsonIgnore]
-        public User Recipient { get; set; }
+        public virtual User Recipient { get; set; }
         public string Content { get; set; }
         public bool IsRead { get; set; }
         public DateTime? DateRead { get; set; }
