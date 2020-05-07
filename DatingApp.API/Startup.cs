@@ -27,14 +27,22 @@ namespace DatingApp.API
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => {
+            // services.AddDbContext<DataContext>(x => {
+            //     x.UseLazyLoadingProxies();
+            //     x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            // } );
+
+            //SqlServer
+             services.AddDbContext<DataContext>(x => {
                 x.UseLazyLoadingProxies();
-                x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-            } );
+                x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             //Pour MySql
-            // services.AddDbContext<DataContext>(x => 
-            //     x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));//à maj
+            // services.AddDbContext<DataContext>(x => {
+            //     x.UseLazyLoadingProxies();
+            //     x.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+            // });//à maj
 
             ConfigureServices(services);
         }
@@ -42,11 +50,16 @@ namespace DatingApp.API
         public void ConfigureProductionServices(IServiceCollection services)
         {
             //Pour MySql
+            // services.AddDbContext<DataContext>(x => {
+            //     x.UseLazyLoadingProxies();
+            //     x.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+            // });
+
+            //Pour Win AZURE
             services.AddDbContext<DataContext>(x => {
                 x.UseLazyLoadingProxies();
-                x.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
-            });//à maj
-
+                x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
             //Pour SqlServer
             // services.AddDbContext<DataContext>(x => 
             //     x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -86,22 +99,25 @@ namespace DatingApp.API
             }
             else
             {
-                app.UseExceptionHandler(builder => {
-                    builder.Run(async context => {
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                // app.UseExceptionHandler(builder => {
+                //     builder.Run(async context => {
+                //         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                        var error = context.Features.Get<IExceptionHandlerFeature>();
-                        if(error != null)
-                        {
-                            context.Response.AddApplicationError(error.Error.Message);
-                            await context.Response.WriteAsync(error.Error.Message);
-                        }
-                    });
-                });
+                //         var error = context.Features.Get<IExceptionHandlerFeature>();
+                //         if(error != null)
+                //         {
+                //             context.Response.AddApplicationError(error.Error.Message);
+                //             await context.Response.WriteAsync(error.Error.Message);
+                //         }
+                //     });
+                // });
+
+                app.UseHsts();
 
             }
 
-            // app.UseHttpsRedirection();
+            app.UseDeveloperExceptionPage();
+            app.UseHttpsRedirection();
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             
