@@ -25,7 +25,7 @@ export class ListsComponent implements OnInit {
       this.pagination = data['users'].pagination;
     });
 
-    this.likesParam = 'Likees';//'Likers';
+    this.likesParam = 'Likers';
   }
 
   loadUsers() {

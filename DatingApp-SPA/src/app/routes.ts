@@ -16,7 +16,7 @@ import { MessagesResolver } from './_resolvers/messages.resolver';
 export const appRoutes: Routes = [
     { path: '', component: HomeComponent },
     {
-        path: '', 
+        path: '',
         runGuardsAndResolvers: 'always',
         canActivate: [AuthGuard],
         children: [

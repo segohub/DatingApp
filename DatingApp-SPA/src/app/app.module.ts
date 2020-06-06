@@ -1,15 +1,17 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, Pipe, PipeTransform } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDropdownModule, TabsModule, PaginationModule } from 'ngx-bootstrap';
+import { BsDropdownModule, PaginationModule } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { RouterModule } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import '@angular/compiler';
-// import { TimeAgoPipe } from 'time-ago-pipe';
+import { TimeAgoPipe } from 'time-ago-pipe';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -42,12 +44,15 @@ export function tokenGetter() {
    return localStorage.getItem('token');
 }
 
-// export class CustomHammerConfig extends HammerGestureConfig  {
-//    overrides = {
-//        pinch: { enable: false },
-//        rotate: { enable: false }
-//    };
-// }
+@Pipe({
+   name: 'timeAgo',
+   pure: false
+ })
+ export class TimeAgoExtendsPipe extends TimeAgoPipe implements PipeTransform {
+   transform(value: string): string {
+     return super.transform(value);
+   }
+ }
 
 @NgModule({
    declarations: [
@@ -62,8 +67,8 @@ export function tokenGetter() {
       MemberDetailComponent,
       MemberEditComponent,
       PhotoEditorComponent,
-      MemberMessagesComponent
-      // TimeAgoPipe
+      MemberMessagesComponent,
+      TimeAgoExtendsPipe
    ],
    imports: [
       BrowserModule,
@@ -74,6 +79,7 @@ export function tokenGetter() {
       NgxGalleryModule,
       FileUploadModule,
       TabsModule.forRoot(),
+      ButtonsModule.forRoot(),
       BsDropdownModule.forRoot(),
       BsDatepickerModule.forRoot(),
       PaginationModule.forRoot(),
@@ -98,7 +104,6 @@ export function tokenGetter() {
       PreventUnsavedChanges,
       ListsResolver,
       MessagesResolver
-      // { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
    ],
    bootstrap: [
       AppComponent

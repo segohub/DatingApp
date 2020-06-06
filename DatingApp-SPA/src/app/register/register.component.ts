@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
   user: User;
   registerForm: FormGroup;
-  bsConfig: Partial<BsDatepickerConfig>; //Partial permet de rendre les propriétés concernées optionelles
+  bsConfig: Partial<BsDatepickerConfig>; // Partial permet de rendre les propriétés concernées optionelles
 
   constructor(private authService: AuthService, private alertify: AlertifyService,
               private fb: FormBuilder, private router: Router) { }
@@ -49,8 +49,9 @@ export class RegisterComponent implements OnInit {
   }
 
   register(){
-    if(this.registerForm.valid){
+    if (this.registerForm.valid){
       this.user = Object.assign({}, this.registerForm.value);
+
       this.authService.register(this.user).subscribe(() => {
         this.alertify.success('Registration successfull');
       }, error => {
@@ -71,6 +72,6 @@ export class RegisterComponent implements OnInit {
 
   cancel(){
     this.cancelRegister.emit(false);
-    this.alertify.message("cancelled");
+    this.alertify.message('cancelled');
   }
 }

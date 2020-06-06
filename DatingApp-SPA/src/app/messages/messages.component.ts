@@ -15,7 +15,7 @@ import { error } from 'protractor';
 export class MessagesComponent implements OnInit {
   messages: Message[];
   pagination: Pagination;
-  messageContainer = 'Inbox';//'Outbox';
+  messageContainer = 'Unread';
 
   constructor(private userService: UserService, private authService: AuthService,
               private route: ActivatedRoute, private alertify: AlertifyService) { }

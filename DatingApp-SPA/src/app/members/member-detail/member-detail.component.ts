@@ -12,7 +12,7 @@ import { TabsetComponent } from 'ngx-bootstrap';
   styleUrls: ['./member-detail.component.css']
 })
 export class MemberDetailComponent implements OnInit {
-  @ViewChild('memberTabs') memberTabs: TabsetComponent;
+  @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
   user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
@@ -22,7 +22,7 @@ export class MemberDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe(data => {
-      this.user = data['user'];
+      this.user = data.user; //['user'];
     });
 
     this.route.queryParams.subscribe(params => {
